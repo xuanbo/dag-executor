@@ -1,12 +1,12 @@
 package tk.fishfish.dagexecutor;
 
 import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.common.graph.Graph;
 import com.google.common.graph.Graphs;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -25,18 +25,21 @@ public final class Dag {
     /**
      * 所有任务
      */
-    private final HashSet<Runnable> tasks;
+    private final Set<Runnable> tasks;
 
     /**
-     * 依赖
+     * 任务依赖的（多个）任务
      */
-    private final ArrayListMultimap<Runnable, Runnable> dependencies;
+    private final ListMultimap<Runnable, Runnable> dependencies;
 
     /**
      * 任务错误信息
      */
     private final Map<Runnable, Throwable> errors;
 
+    /**
+     * 锁
+     */
     private final ReadWriteLock lock = new ReentrantReadWriteLock();
     private final Lock readLock = lock.readLock();
     private final Lock writeLock = lock.writeLock();
@@ -72,25 +75,6 @@ public final class Dag {
             dag.dependencies.putAll(runnable, predecessors);
         }
         return dag;
-    }
-
-    public enum Status {
-
-        /**
-         * 正常完成所有任务
-         */
-        COMPLETED,
-
-        /**
-         * 任务存在错误
-         */
-        ERRORS,
-
-        /**
-         * 处理中
-         */
-        PROCESSING,
-
     }
 
     /**
