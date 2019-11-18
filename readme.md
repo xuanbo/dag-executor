@@ -4,7 +4,11 @@
 
 ## Example
 
-如下是一个单/多线程的DAG任务流执行例子。
+对于如图所示的任务流：
+
+![dag](./docs/dag.jpg)
+
+下面是一个单/多线程的 DAG 任务流执行例子：
 
 ```java
 package tk.fishfish.dagexecutor;
